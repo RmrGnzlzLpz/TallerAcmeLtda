@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Documents\\Datos\\10mo Semestre\\TDD\\C#\\Primer Corte\\AcmeLtda\\AcmeLtda\\Domain\\Domain.csproj": {}
+    "D:\\Documents\\Datos\\10mo Semestre\\TDD\\C#\\Primer Corte\\AcmeLtda\\Domain\\Domain.csproj": {}
   },
   "projects": {
-    "D:\\Documents\\Datos\\10mo Semestre\\TDD\\C#\\Primer Corte\\AcmeLtda\\AcmeLtda\\Domain\\Domain.csproj": {
+    "D:\\Documents\\Datos\\10mo Semestre\\TDD\\C#\\Primer Corte\\AcmeLtda\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Documents\\Datos\\10mo Semestre\\TDD\\C#\\Primer Corte\\AcmeLtda\\AcmeLtda\\Domain\\Domain.csproj",
+        "projectUniqueName": "D:\\Documents\\Datos\\10mo Semestre\\TDD\\C#\\Primer Corte\\AcmeLtda\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "D:\\Documents\\Datos\\10mo Semestre\\TDD\\C#\\Primer Corte\\AcmeLtda\\AcmeLtda\\Domain\\Domain.csproj",
+        "projectPath": "D:\\Documents\\Datos\\10mo Semestre\\TDD\\C#\\Primer Corte\\AcmeLtda\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\Rmrgnzlz\\.nuget\\packages\\",
-        "outputPath": "D:\\Documents\\Datos\\10mo Semestre\\TDD\\C#\\Primer Corte\\AcmeLtda\\AcmeLtda\\Domain\\obj\\",
+        "outputPath": "D:\\Documents\\Datos\\10mo Semestre\\TDD\\C#\\Primer Corte\\AcmeLtda\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
