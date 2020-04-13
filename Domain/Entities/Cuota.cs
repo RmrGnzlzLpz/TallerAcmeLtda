@@ -24,8 +24,12 @@ namespace Domain.Entities
         }
         public void Abonar(double monto)
         {
-            if (monto > Valor - Pagado) throw new Exception("No se puede abonar este valor");
+            if (monto > Saldo) throw new Exception("No se puede abonar este valor");
             Pagado += monto;
+        }
+        public void Saldar()
+        {
+            Pagado += Saldo;
         }
     }
 
