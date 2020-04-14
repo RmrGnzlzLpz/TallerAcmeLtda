@@ -99,6 +99,8 @@ namespace Domain.Test
             credito = empleado.Creditos.FirstOrDefault();
             credito.Abonar(1890000);
             Assert.AreEqual($"Numero = 2, Estado = Pagada, Valor = 630000, Saldo = 0, Fecha = {credito.Cuotas[1].FechaDePago}", credito.Cuotas[1].ToString());
+            Assert.AreEqual(3, credito.Cuotas.Where(x => x.Estado == EstadoDeCuota.Pagada).ToList().Count); // 3 Cuotas pagadas
+            Assert.AreEqual(7, credito.Cuotas.Where(x => x.Estado == EstadoDeCuota.Pendiente).ToList().Count); // 7 Cuotas pendientes (saldo = 0)
         }
 
 
@@ -117,18 +119,8 @@ namespace Domain.Test
             credito.Abonar(700000);
             var abono = credito.Abonos[2];
             Assert.AreEqual($"Valor = 700000, Fecha = {abono.FechaDeCreacion}", abono.ToString());
-        }
-
-        [Test]
-        public void ListarAbonosYCuotas()
-        {
-            CreateCredit(6000000, 10);
-            credito = empleado.Creditos.FirstOrDefault();
-            credito.Abonar(660000);
-            credito.Abonar(820000);
-            credito.Abonar(700000);
-            Assert.AreEqual(3, credito.Abonos.Count);
-            Assert.AreEqual(10, credito.Cuotas.Count);
+            Assert.AreEqual(3, credito.Abonos.Count); // 3 Abonos
+            Assert.AreEqual(10, credito.Cuotas.Count); // 10 Cuotas
         }
 
         /* NoTests */
