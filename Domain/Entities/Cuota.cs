@@ -16,20 +16,39 @@ namespace Domain.Entities
         public EstadoDeCuota Estado {
             get
             {
-                if (Pagado == Valor) return EstadoDeCuota.Pagada;
+                if (Saldo == 0) return EstadoDeCuota.Pagada;
                 if (FechaDePago < DateTime.UtcNow) return EstadoDeCuota.Vencida;
-                if (Pagado > 0) return EstadoDeCuota.Parcial;
-                return EstadoDeCuota.Pendiente;
+                if (Pagado == 0) return EstadoDeCuota.Pendiente;
+                return EstadoDeCuota.Parcial;
             }
         }
-        public void Abonar(double monto)
+        public string Abonar(double monto)
         {
             if (monto > Saldo) throw new Exception("No se puede abonar este valor");
             Pagado += monto;
+            return ToString();
         }
         public void Saldar()
         {
             Pagado += Saldo;
+        }
+
+        private string EstadoToString()
+        {
+            switch (Estado)
+            {
+                case EstadoDeCuota.Pendiente: return "Pendiente";
+                case EstadoDeCuota.Pagada: return "Pagada";
+                case EstadoDeCuota.Vencida: return "Vencida";
+                case EstadoDeCuota.Parcial: return "Parcial";
+                default: return "Vencida";
+            }
+        }
+
+        override
+        public string ToString()
+        {
+            return $"Numero = {Orden}, Estado = {EstadoToString()}, Valor = {Valor}, Saldo = {Saldo}, Fecha = {FechaDePago}";
         }
     }
 

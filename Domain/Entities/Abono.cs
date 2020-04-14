@@ -9,5 +9,11 @@ namespace Domain.Entities
     {
         public double Monto { get; set; }
         public DateTime FechaDeCreacion { get; set; } = DateTime.UtcNow;
+
+        override
+        public string ToString()
+        {
+            return $"Valor = {Monto}, Fecha = {FechaDeCreacion}";
+        }
     }
 }

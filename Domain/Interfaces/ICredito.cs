@@ -9,6 +9,6 @@ namespace Domain.Interfaces
         double Valor { get; set; }
         double Pagado { get; set; }
         double Saldo { get; }
-        void Abonar(double monto);
+        string Abonar(double monto);
     }
 }
