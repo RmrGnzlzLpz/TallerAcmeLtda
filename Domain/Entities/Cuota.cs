@@ -6,13 +6,14 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    public class Cuota : Entity<int>, ICredito
+    public class Cuota : Entity<int>
     {
         public double Valor { get; set; }
         public double Pagado { get; set; }
         public double Saldo { get => Valor - Pagado; }
         public int Orden { get; set; }
         public DateTime FechaDePago { get; set; }
+        public List<AbonoCuota> AbonoCuotas { get; set; }
         public EstadoDeCuota Estado {
             get
             {
@@ -27,10 +28,6 @@ namespace Domain.Entities
             if (monto > Saldo) throw new Exception("No se puede abonar este valor");
             Pagado += monto;
             return ToString();
-        }
-        public void Saldar()
-        {
-            Pagado += Saldo;
         }
 
         private string EstadoToString()
