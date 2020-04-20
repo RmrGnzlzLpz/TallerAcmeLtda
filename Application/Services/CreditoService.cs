@@ -7,6 +7,7 @@ using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Application.Services
@@ -45,7 +46,7 @@ namespace Application.Services
 
         public Response<Credito> Abonar(AbonoRequest request)
         {
-            Credito credito = base.Buscar(x => x.Id == request.CreditoId, include: "Cuotas").FirstOrDefault();
+            Credito credito = Buscar(x => x.Id == request.CreditoId).FirstOrDefault();
             if (credito == null)
             {
                 return new Response<Credito>
@@ -68,6 +69,11 @@ namespace Application.Services
                 Mensaje = mensaje,
                 Entity = credito
             };
+        }
+
+        public override IEnumerable<Credito> Buscar(Expression<Func<Credito, bool>> predicate = null, string include = "Cuotas,Abonos")
+        {
+            return base.Buscar(predicate: predicate, include: include);
         }
     }
 }

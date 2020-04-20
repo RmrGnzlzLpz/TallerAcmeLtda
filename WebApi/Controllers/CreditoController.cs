@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Models;
+using Application.Requests;
 using Application.Services;
 using Domain.Contracts;
 using Domain.Entities;
@@ -24,9 +26,21 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Credito> Get()
+        public ActionResult<IEnumerable<Credito>> GetAll()
         {
-            return _service.Buscar();
+            return Ok(_service.Buscar());
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<Credito>> Get(int id)
+        {
+            return Ok(_service.Buscar(x => x.Id == id));
+        }
+
+        [HttpPost("abonar")]
+        public ActionResult<Response<Credito>> Abonar(AbonoRequest abono)
+        {
+            return Ok(_service.Abonar(abono));
         }
     }
 }

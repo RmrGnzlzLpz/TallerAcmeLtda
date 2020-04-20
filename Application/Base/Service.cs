@@ -29,12 +29,12 @@ namespace Application.Base
             };
         }
 
-        public virtual IEnumerable<T> Buscar(Expression<Func<T, bool>> predicate, string include = "")
+        public virtual IEnumerable<T> Buscar(Expression<Func<T, bool>> predicate = null, string include = "")
         {
             return _repository.FindBy(predicate, includeProperties: include);
         }
 
-        public virtual IEnumerable<T> Buscar()
+        public virtual IEnumerable<T> All()
         {
             return _repository.GetAll();
         }
