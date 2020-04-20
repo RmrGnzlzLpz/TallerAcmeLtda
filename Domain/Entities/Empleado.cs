@@ -23,5 +23,10 @@ namespace Domain.Entities
             Creditos.Add(credito);
             return $"Crédito registrado. Valor a pagar: ${credito.ValorAPagar}.";
         }
+
+        public override string ToString()
+        {
+            return string.Format("Cedula = {0}, Nombre = {1}, Salario = {2}", Cedula, Nombre, Salario);
+        }
     }
 }

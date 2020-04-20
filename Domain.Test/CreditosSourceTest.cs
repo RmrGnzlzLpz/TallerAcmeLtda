@@ -13,29 +13,29 @@ namespace Domain.Test
         [SetUp]
         public void Setup()
         {
-            /* En los escenario de prueba se mencionó "Valor a Pagar", dichos valores deben tomarse como el valor solicitado y no como el saldo total */
+            /* En los escenario de prueba se mencionï¿½ "Valor a Pagar", dichos valores deben tomarse como el valor solicitado y no como el saldo total */
             empleado = new Empleado
             {
                 Cedula = "1082470166",
-                Nombre = "Ramiro González",
+                Nombre = "Ramiro Gonzï¿½lez",
                 Salario = 1200000
             };
         }
 
         /*
-         * HU 001 - Como usuario quiero registrar créditos por libranzas para llevar el control de créditos
+         * HU 001 - Como usuario quiero registrar crï¿½ditos por libranzas para llevar el control de crï¿½ditos
          * Criterios:
-         *  1. Los créditos deben ser por valores entre 5 millón y 10 millones
-         *  2. El valor del interés del crédito será de 0.5% por cada mes de plazo
-         *  3. El plazo para el pago del crédito debe ser de máximo 10 meses
-         *  4. El valor total para pagar será valor del crédito + Tasa Interés por el plazo del crédito SaldoInicialCredito = ValorCredito*(1 + TasaInteres x PlazoCredito)
+         *  1. Los crï¿½ditos deben ser por valores entre 5 millï¿½n y 10 millones
+         *  2. El valor del interï¿½s del crï¿½dito serï¿½ de 0.5% por cada mes de plazo
+         *  3. El plazo para el pago del crï¿½dito debe ser de mï¿½ximo 10 meses
+         *  4. El valor total para pagar serï¿½ valor del crï¿½dito + Tasa Interï¿½s por el plazo del crï¿½dito SaldoInicialCredito = ValorCredito*(1 + TasaInteres x PlazoCredito)
          *  5. El sistema debe llevar el registro de las cuotas
          * **/
         private static IEnumerable SIncorrectas()
         {
-            yield return new TestCaseData(4000000, 10, "El valor del crédito debe estar entre 5 y 10 millones.").SetName("ValorInferiorIncorrecto");
-            yield return new TestCaseData(15000000, 10, "El valor del crédito debe estar entre 5 y 10 millones.").SetName("ValorSuperiorIncorrecto");
-            yield return new TestCaseData(6000000, 11, "El plazo para el pago del crédito debe ser de máximo 10 meses.").SetName("PlazoIncorrecto");
+            yield return new TestCaseData(4000000, 10, "El valor del crï¿½dito debe estar entre 5 y 10 millones.").SetName("ValorInferiorIncorrecto");
+            yield return new TestCaseData(15000000, 10, "El valor del crï¿½dito debe estar entre 5 y 10 millones.").SetName("ValorSuperiorIncorrecto");
+            yield return new TestCaseData(6000000, 11, "El plazo para el pago del crï¿½dito debe ser de mï¿½ximo 10 meses.").SetName("PlazoIncorrecto");
         }
 
         [TestCaseSource("SIncorrectas")]
@@ -49,20 +49,20 @@ namespace Domain.Test
         public void SolicitudCorrecta()
         {
             string response = empleado.SolicitarCredito(6000000, 10);
-            Assert.AreEqual("Crédito registrado. Valor a pagar: $6300000.", response);
+            Assert.AreEqual("Crï¿½dito registrado. Valor a pagar: $6300000.", response);
         }
 
         /*
-         * HU 002 - Como cliente Quiero registrar abonos de dinero al crédito para ir amortizando el valor de dicho crédito
-         *  1. El cliente puede abonar mínimo el valor de la cuota pendiente, pero puede decir abonar más del valor correspondiente lo cual se descontaría de las cuotas siguientes
+         * HU 002 - Como cliente Quiero registrar abonos de dinero al crï¿½dito para ir amortizando el valor de dicho crï¿½dito
+         *  1. El cliente puede abonar mï¿½nimo el valor de la cuota pendiente, pero puede decir abonar mï¿½s del valor correspondiente lo cual se descontarï¿½a de las cuotas siguientes
          *  2. El sistema debe llevar el registro de los abonos
-         *  3. Los abonos a los créditos deben ser mayor a 0 y no pueden superar el saldo del crédito.
-         *  4. El valor abonado del crédito se debe mantener registrado en el sistema para futuras consultas
+         *  3. Los abonos a los crï¿½ditos deben ser mayor a 0 y no pueden superar el saldo del crï¿½dito.
+         *  4. El valor abonado del crï¿½dito se debe mantener registrado en el sistema para futuras consultas
          * **/
         [TestCaseSource("AIncorrectos")]
         public void AbonosIncorrectos(double valor, int plazo, double abono, string expected)
         {
-            // En el escenario de prueba, los 6 millones aparecen como "Valor a pagar", pero debe tomarse como el valor inicial del crédito.
+            // En el escenario de prueba, los 6 millones aparecen como "Valor a pagar", pero debe tomarse como el valor inicial del crï¿½dito.
             CreateCredit(valor, plazo);
             credito = empleado.Creditos.FirstOrDefault();
             Exception ex = Assert.Throws<Exception>(() => credito.Abonar(abono));
@@ -70,15 +70,36 @@ namespace Domain.Test
         }
         private static IEnumerable AIncorrectos()
         {
-            yield return new TestCaseData(6000000, 10, 500000, "El valor del abono debe ser mínimo de $630000.").SetName("AbonoMenorCuota");
+            yield return new TestCaseData(6000000, 10, 500000, "El valor del abono debe ser mï¿½nimo de $630000.").SetName("AbonoMenorCuota");
             yield return new TestCaseData(6000000, 10, 0, "El valor del abono es incorrecto.").SetName("AbonoCeroONegatvo");
             yield return new TestCaseData(6000000, 10, 7000000, "El valor del abono es incorrecto.").SetName("AbonoSuperiorASaldo");
+        }
+
+        [Test(Description = "Abono con valor igual a la cuota")]
+        public void AbonoIgualCuota()
+        {
+            CreateCredit(6000000, 10);
+            credito = empleado.Creditos.FirstOrDefault();
+            string response = credito.Abonar(630000);
+            Assert.IsNotEmpty(credito.Cuotas.Where(x => x.Estado == EstadoDeCuota.Pagada));
+            Assert.IsEmpty(credito.Cuotas.Where(x => x.Estado == EstadoDeCuota.Parcial));
+            Assert.IsEmpty(credito.Cuotas.Where(x => x.Estado == EstadoDeCuota.Vencida));
+        }
+
+        [Test(Description = "Abono con valor superior a la cuota")]
+        public void AbonoSuperiorCuota()
+        {
+            CreateCredit(6000000, 10);
+            credito = empleado.Creditos.FirstOrDefault();
+            string response = credito.Abonar(670000);
+            Assert.AreEqual(1, credito.Cuotas.Where(x => x.Estado == EstadoDeCuota.Pagada).Count());
+            Assert.AreEqual(1, credito.Cuotas.Where(x => x.Estado == EstadoDeCuota.Parcial).Count());
         }
 
         [Test]
         public void AbonoCorrecto()
         {
-            // En el escenario de prueba, los 6 millones aparecen como "Valor a pagar", pero debe tomarse como el valor inicial del crédito.
+            // En el escenario de prueba, los 6 millones aparecen como "Valor a pagar", pero debe tomarse como el valor inicial del crï¿½dito.
             CreateCredit(6000000, 10);
             credito = empleado.Creditos.FirstOrDefault();
             credito.Abonar(630000);
@@ -88,13 +109,13 @@ namespace Domain.Test
         }
 
         /*
-         * HU 003 - Como cliente quiero consultar el saldo de cada cuota del crédito para conocer el estado de su crédito.
-         *  1. El sistema debe visualizar el listado de abonos realizados a un crédito, visualizando su valor y fecha de abono.
+         * HU 003 - Como cliente quiero consultar el saldo de cada cuota del crï¿½dito para conocer el estado de su crï¿½dito.
+         *  1. El sistema debe visualizar el listado de abonos realizados a un crï¿½dito, visualizando su valor y fecha de abono.
          */
         [Test]
         public void ConsultarCuotas()
         {
-            // En el escenario de prueba, los 6 millones aparecen como "Valor a pagar", pero debe tomarse como el valor inicial del crédito.
+            // En el escenario de prueba, los 6 millones aparecen como "Valor a pagar", pero debe tomarse como el valor inicial del crï¿½dito.
             CreateCredit(6000000, 10);
             credito = empleado.Creditos.FirstOrDefault();
             credito.Abonar(1890000);
@@ -105,13 +126,13 @@ namespace Domain.Test
 
 
         /*
-         *  HU 004 - Como cliente quiero consulta la lista de los abonos realizados a mi crédito para conocer el histórico de pagos.
-         *   1. El sistema debe visualizar el listado de abonos realizados a un crédito, visualizando su valor y fecha de abono
+         *  HU 004 - Como cliente quiero consulta la lista de los abonos realizados a mi crï¿½dito para conocer el histï¿½rico de pagos.
+         *   1. El sistema debe visualizar el listado de abonos realizados a un crï¿½dito, visualizando su valor y fecha de abono
          */
         [Test]
         public void ConsultarAbonos()
         {
-            // En el escenario de prueba, los 6 millones aparecen como "Valor a pagar", pero debe tomarse como el valor inicial del crédito.
+            // En el escenario de prueba, los 6 millones aparecen como "Valor a pagar", pero debe tomarse como el valor inicial del crï¿½dito.
             CreateCredit(6000000, 10);
             credito = empleado.Creditos.FirstOrDefault();
             credito.Abonar(660000);

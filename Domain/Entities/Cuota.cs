@@ -8,12 +8,13 @@ namespace Domain.Entities
 {
     public class Cuota : Entity<int>
     {
+        public int CreditoId { get; set; }
         public double Valor { get; set; }
         public double Pagado { get; set; }
         public double Saldo { get => Valor - Pagado; }
         public int Orden { get; set; }
         public DateTime FechaDePago { get; set; }
-        public List<AbonoCuota> AbonoCuotas { get; set; }
+        public List<AbonoCuota> AbonoCuotas { get; set; } = new List<AbonoCuota>();
         public EstadoDeCuota Estado {
             get
             {
@@ -23,6 +24,12 @@ namespace Domain.Entities
                 return EstadoDeCuota.Parcial;
             }
         }
+
+        public Cuota()
+        {
+
+        }
+
         public string Abonar(double monto)
         {
             if (monto > Saldo) throw new Exception("No se puede abonar este valor");

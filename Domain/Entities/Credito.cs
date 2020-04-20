@@ -17,18 +17,20 @@ namespace Domain.Entities
         public double ValorAPagar { get => Valor * (1 + TasaDeInteres * Plazo); }
         public double ValorCuota { get => ValorAPagar / Plazo; }
         public int Plazo { get; set; } /* El Plazo se mide en meses */
-        public List<Abono> Abonos { get; set; }
-        public List<Cuota> Cuotas { get; set; }
-        public DateTime FechaDeCreacion { get; private set; } = DateTime.UtcNow;
+        public List<Abono> Abonos { get; set; } = new List<Abono>();
+        public List<Cuota> Cuotas { get; set; } = new List<Cuota>();
+        public DateTime FechaDeCreacion { get; private set; }
         [NotMapped]
         public IList<Cuota> CuotasPorPagar
         {
-            get => Cuotas.Where(x => x.Estado != EstadoDeCuota.Pagada).OrderBy(x => x.FechaDePago).ToList();
+            get => Cuotas?.Where(x => x.Estado != EstadoDeCuota.Pagada).OrderBy(x => x.FechaDePago).ToList();
         }
+
+        public Credito() { }
 
         public Credito(double valor, int plazo, double tasaDeInteres = 0.005)
         {
-            ValidarEntidad(valor, plazo, tasaDeInteres);
+            FechaDeCreacion = DateTime.UtcNow;
             Valor = valor;
             Plazo = plazo;
             TasaDeInteres = tasaDeInteres;
@@ -37,7 +39,10 @@ namespace Domain.Entities
         }
         public string Abonar(double monto)
         {
-            PuedeAbonar(monto);
+            if (PuedeAbonar(monto).Any())
+            {
+                throw new Exception(string.Join(",", PuedeAbonar(monto)));
+            };
             Abono abono = new Abono { Monto = monto };
             Abonos.Add(abono);
             Pagado += abono.Monto;
@@ -58,11 +63,18 @@ namespace Domain.Entities
             }
             return $"Abono registrado correctamente. Su nuevo saldo es: ${Saldo}.";
         }
-        public void PuedeAbonar(double monto)
+        public List<string> PuedeAbonar(double monto)
         {
-            if (monto <= 0 || monto > Saldo) throw new Exception("El valor del abono es incorrecto.");
-            if (CuotasPorPagar.Count == 0) throw new Exception("No hay cuotas pendientes");
-            if (monto < CuotasPorPagar.FirstOrDefault().Saldo) throw new Exception($"El valor del abono debe ser mínimo de ${CuotasPorPagar.FirstOrDefault().Saldo}.");
+            List<string> errores = new List<string>();
+            if (monto <= 0 || monto > Saldo) errores.Add("El valor del abono es incorrecto.");
+            if (CuotasPorPagar.Count == 0)
+            {
+                errores.Add("No hay cuotas pendientes");
+            } else
+            {
+                if (monto < CuotasPorPagar.FirstOrDefault().Saldo) errores.Add($"El valor del abono debe ser mínimo de ${CuotasPorPagar.FirstOrDefault().Saldo}.");
+            }
+            return errores;
         }
 
         private List<Cuota> GenerarCuotas(int numeroDeCuotas)
@@ -84,26 +96,6 @@ namespace Domain.Entities
         public string ToString()
         {
             return $"Valor = {Valor}, Saldo = {ValorAPagar}, Cuotas = {Cuotas.Count}, Interes = {TasaDeInteres}";
-        }
-
-        /* Validations */
-        private void ValidarEntidad(double valor, int numeroDeCuotas, double tasaDeInteres)
-        {
-            ValidarValor(valor);
-            ValidarCuotas(numeroDeCuotas);
-            ValidarTasa(tasaDeInteres);
-        }
-        private void ValidarValor(double valor)
-        {
-            if (valor < 5000000 || valor > 10000000) throw new Exception("El valor del crédito debe estar entre 5 y 10 millones.");
-        }
-        private void ValidarCuotas(int numeroDeCuotas)
-        {
-            if (numeroDeCuotas < 0 || numeroDeCuotas > 10) throw new Exception("El plazo para el pago del crédito debe ser de máximo 10 meses.");
-        }
-        private void ValidarTasa(double tasaDeInteres)
-        {
-            if (tasaDeInteres < 0 || tasaDeInteres > 1) throw new Exception("Tasa Incorrecta.");
         }
     }
 }

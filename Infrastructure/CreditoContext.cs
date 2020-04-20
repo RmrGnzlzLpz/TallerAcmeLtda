@@ -20,6 +20,8 @@ namespace Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AbonoCuota>().HasKey(ac => new { ac.AbonoId, ac.CuotaId });
+            modelBuilder.Entity<AbonoCuota>().HasOne(x => x.Cuota).WithMany(x => x.AbonoCuotas).HasForeignKey(x => x.CuotaId);
+            modelBuilder.Entity<AbonoCuota>().HasOne(x => x.Abono).WithMany(x => x.AbonoCuotas).HasForeignKey(x => x.AbonoId);
         }
     }
 }

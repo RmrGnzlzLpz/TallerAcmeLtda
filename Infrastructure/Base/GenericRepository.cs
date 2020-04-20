@@ -1,6 +1,7 @@
 ﻿using Domain.Base;
 using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,35 @@ namespace Infrastructure.Base
         {
             return _dbset.AsQueryable();
         }
+
+        //public virtual IEnumerable<T> FinInclude(
+        //    Expression<Func<T, T>> selector,
+        //    Expression<Func<T, bool>> predicate = null,
+        //    Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+        //    Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+        //    bool disableTracking = true)
+        //{
+        //    IQueryable<T> query = _dbset;
+
+        //    if (predicate != null)
+        //    {
+        //        query = query.Where(predicate);
+        //    }
+
+        //    if (include != null)
+        //    {
+        //        query = include(query);
+        //    }
+
+        //    if (orderBy != null)
+        //    {
+        //        return orderBy(query).ToList();
+        //    }
+        //    else
+        //    {
+        //        return query.ToList();
+        //    }
+        //}
 
         public virtual IEnumerable<T> FindBy(
         Expression<Func<T, bool>> filter = null,
@@ -101,6 +131,5 @@ namespace Infrastructure.Base
         {
             _dbset.AddRange(entities);
         }
-
     }
 }
