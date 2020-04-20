@@ -52,12 +52,12 @@ namespace Domain.Entities
                 {
                     monto -= cuota.Saldo;
                     cuota.Abonar(cuota.Saldo);
-                    cuota.AbonoCuotas.Add(new AbonoCuota { Abono = abono, Cuota = cuota});
+                    cuota.AbonoCuotas.Add(new AbonoCuota { Abono = abono, CuotaId = cuota.Id });
                 }
                 else
                 {
                     cuota.Abonar(monto);
-                    cuota.AbonoCuotas.Add(new AbonoCuota { Abono = abono, Cuota = cuota});
+                    cuota.AbonoCuotas.Add(new AbonoCuota { Abono = abono, CuotaId = cuota.Id });
                     break;
                 }
             }

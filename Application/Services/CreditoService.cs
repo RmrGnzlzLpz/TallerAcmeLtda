@@ -63,10 +63,13 @@ namespace Application.Services
                 };
             }
             string mensaje = credito.Abonar(request.Monto);
+            _unitOfWork.CreditoRepository.Edit(credito);
             _unitOfWork.Commit();
+            credito.Abonos = null; // Eliminar las listas internas por problemas de ciclos en Json
+            credito.Cuotas = null; // Cuotas contiene AbonoCuotas y AbonoCuotas contiene Cuota
             return new Response<Credito>
             {
-                Mensaje = mensaje,
+                Mensaje = mensaje, 
                 Entity = credito
             };
         }

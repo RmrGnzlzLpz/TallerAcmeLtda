@@ -9,7 +9,7 @@ namespace Domain.Entities
     {
         public double Monto { get; set; }
         public DateTime FechaDeCreacion { get; set; } = DateTime.UtcNow;
-        public List<AbonoCuota> AbonoCuotas { get; set; }
+        public ICollection<AbonoCuota> AbonoCuotas { get; set; }
 
         public Abono()
         {

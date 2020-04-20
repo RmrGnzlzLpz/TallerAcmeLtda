@@ -8,13 +8,12 @@ namespace Domain.Entities
 {
     public class Cuota : Entity<int>
     {
-        public int CreditoId { get; set; }
         public double Valor { get; set; }
         public double Pagado { get; set; }
         public double Saldo { get => Valor - Pagado; }
         public int Orden { get; set; }
         public DateTime FechaDePago { get; set; }
-        public List<AbonoCuota> AbonoCuotas { get; set; } = new List<AbonoCuota>();
+        public ICollection<AbonoCuota> AbonoCuotas { get; set; }
         public EstadoDeCuota Estado {
             get
             {
@@ -27,7 +26,7 @@ namespace Domain.Entities
 
         public Cuota()
         {
-
+            AbonoCuotas = new List<AbonoCuota>();
         }
 
         public string Abonar(double monto)

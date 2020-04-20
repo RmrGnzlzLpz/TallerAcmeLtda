@@ -34,13 +34,22 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<Credito>> Get(int id)
         {
-            return Ok(_service.Buscar(x => x.Id == id));
+            var response = _service.Buscar(x => x.Id == id);
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public ActionResult<Response<Credito>> Post(CreditoRequest credito)
+        {
+            var response = _service.Crear(credito);
+            return Ok(response);
         }
 
         [HttpPost("abonar")]
         public ActionResult<Response<Credito>> Abonar(AbonoRequest abono)
         {
-            return Ok(_service.Abonar(abono));
+            var response = _service.Abonar(abono);
+            return Ok(response);
         }
     }
 }
