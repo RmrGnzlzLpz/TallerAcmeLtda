@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace WebApi
 {
@@ -31,7 +32,8 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CreditoContext>(
-                opt => opt.UseSqlServer("Server=localhost;Database=AcmeLtda;Trusted_Connection=True;")
+                opt => opt.UseMySql("Server=localhost;Database=efcore;User=root;Password=1234;")
+                // opt => opt.UseSqlServer("Server=localhost;Database=AcmeLtda;Trusted_Connection=True;")
             );
             //services.AddDbContext<CreditoContext>
             //(

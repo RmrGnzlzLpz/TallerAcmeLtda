@@ -8,6 +8,7 @@ namespace Domain.Entities
 {
     public class Cuota : Entity<int>
     {
+        public int CreditoId { get; set; }
         public double Valor { get; set; }
         public double Pagado { get; set; }
         public double Saldo { get => Valor - Pagado; }

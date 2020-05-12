@@ -8,6 +8,6 @@ namespace Application.Base
 {
     public interface IService<T> where T : BaseEntity
     {
-        public Response<T> Agregar(T request);
+        Response<T> Agregar(T request);
     }
 }

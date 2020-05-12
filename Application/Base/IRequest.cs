@@ -7,6 +7,6 @@ namespace Application.Base
 {
     public interface IRequest<T> where T : BaseEntity
     {
-        public T ToEntity();
+        T ToEntity();
     }
 }

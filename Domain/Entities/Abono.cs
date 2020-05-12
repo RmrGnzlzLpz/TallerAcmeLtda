@@ -9,12 +9,7 @@ namespace Domain.Entities
     {
         public double Monto { get; set; }
         public DateTime FechaDeCreacion { get; set; } = DateTime.UtcNow;
-        public ICollection<AbonoCuota> AbonoCuotas { get; set; }
-
-        public Abono()
-        {
-
-        }
+        public ICollection<AbonoCuota> AbonoCuotas { get; set; } = new List<AbonoCuota>();
 
         override
         public string ToString()

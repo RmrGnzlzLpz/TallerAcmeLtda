@@ -30,8 +30,8 @@ namespace Application.Services
                 };
             }
 
-            var _errores = CreditoBuilder.PuedeCrearCredito(request.Valor, request.Plazo, request.TasaDeInteres);
-            if (_errores.Any()) return new Response<Credito> { Mensaje = string.Join(",", _errores), Entity = request.ToEntity() };
+            var errores = CreditoBuilder.PuedeCrearCredito(request.Valor, request.Plazo, request.TasaDeInteres);
+            if (errores.Any()) return new Response<Credito> { Mensaje = string.Join("|", errores), Entity = request.ToEntity() };
 
             Credito credito = CreditoBuilder.CrearCredito(request.Valor, request.Plazo, request.TasaDeInteres);
             empleado.Creditos.Add(credito);
@@ -59,14 +59,14 @@ namespace Application.Services
             {
                 return new Response<Credito>
                 {
-                    Mensaje = string.Join(",", errores)
+                    Mensaje = string.Join("|", errores)
                 };
             }
             string mensaje = credito.Abonar(request.Monto);
             _unitOfWork.CreditoRepository.Edit(credito);
             _unitOfWork.Commit();
             credito.Abonos = null; // Eliminar las listas internas por problemas de ciclos en Json
-            credito.Cuotas = null; // Cuotas contiene AbonoCuotas y AbonoCuotas contiene Cuota
+            credito.Cuotas = null;
             return new Response<Credito>
             {
                 Mensaje = mensaje, 

@@ -23,7 +23,7 @@ namespace Domain.Contracts
 
         IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate);
 
-        IEnumerable<T> FindBy(
+        IQueryable<T> FindBy(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>,
             IOrderedQueryable<T>> orderBy = null,

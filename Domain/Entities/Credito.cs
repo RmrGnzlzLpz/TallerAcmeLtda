@@ -26,7 +26,10 @@ namespace Domain.Entities
             get => Cuotas?.Where(x => x.Estado != EstadoDeCuota.Pagada).OrderBy(x => x.FechaDePago).ToList();
         }
 
-        public Credito() { }
+        public Credito()
+        {
+            Abonos = new List<Abono>();
+        }
 
         public Credito(double valor, int plazo, double tasaDeInteres = 0.005)
         {
@@ -48,18 +51,20 @@ namespace Domain.Entities
             Pagado += abono.Monto;
             foreach (Cuota cuota in CuotasPorPagar)
             {
+                if (monto <= 0) break;
                 if (monto > cuota.Saldo)
                 {
-                    monto -= cuota.Saldo;
                     cuota.Abonar(cuota.Saldo);
-                    cuota.AbonoCuotas.Add(new AbonoCuota { Abono = abono, CuotaId = cuota.Id });
+                    monto -= cuota.Saldo;
                 }
                 else
                 {
                     cuota.Abonar(monto);
-                    cuota.AbonoCuotas.Add(new AbonoCuota { Abono = abono, CuotaId = cuota.Id });
-                    break;
+                    monto -= monto;
                 }
+                AbonoCuota abonoCuota = new AbonoCuota(abono, cuota);
+                cuota.AbonoCuotas.Add(abonoCuota);
+                abono.AbonoCuotas.Add(abonoCuota);
             }
             return $"Abono registrado correctamente. Su nuevo saldo es: ${Saldo}.";
         }

@@ -1,9 +1,10 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +13,7 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Cedula = table.Column<string>(nullable: false),
                     Nombre = table.Column<string>(nullable: false),
                     Salario = table.Column<double>(nullable: false)
@@ -27,7 +28,7 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     TasaDeInteres = table.Column<double>(nullable: false),
                     Valor = table.Column<double>(nullable: false),
                     Pagado = table.Column<double>(nullable: false),
@@ -51,7 +52,7 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Monto = table.Column<double>(nullable: false),
                     FechaDeCreacion = table.Column<DateTime>(nullable: false),
                     CreditoId = table.Column<int>(nullable: true)
@@ -72,12 +73,12 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreditoId = table.Column<int>(nullable: false),
                     Valor = table.Column<double>(nullable: false),
                     Pagado = table.Column<double>(nullable: false),
                     Orden = table.Column<int>(nullable: false),
-                    FechaDePago = table.Column<DateTime>(nullable: false),
-                    CreditoId = table.Column<int>(nullable: true)
+                    FechaDePago = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,7 +88,7 @@ namespace Infrastructure.Migrations
                         column: x => x.CreditoId,
                         principalTable: "Creditos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

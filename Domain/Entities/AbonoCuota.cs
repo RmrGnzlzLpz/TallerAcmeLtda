@@ -11,5 +11,13 @@ namespace Domain.Entities
         public Abono Abono { get; set; }
         public int CuotaId {get; set;}
         public Cuota Cuota {get; set; }
+
+        public AbonoCuota(Abono abono, Cuota cuota)
+        {
+            AbonoId = abono.Id;
+            CuotaId = cuota.Id;
+        }
+
+        public AbonoCuota() {}
     }
 }

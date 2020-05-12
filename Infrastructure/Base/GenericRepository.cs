@@ -49,6 +49,7 @@ namespace Infrastructure.Base
         }
 
         //public virtual IEnumerable<T> FinInclude(
+        #region Include
         //    Expression<Func<T, T>> selector,
         //    Expression<Func<T, bool>> predicate = null,
         //    Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
@@ -75,9 +76,10 @@ namespace Infrastructure.Base
         //    {
         //        return query.ToList();
         //    }
+        #endregion
         //}
 
-        public virtual IEnumerable<T> FindBy(
+        public virtual IQueryable<T> FindBy(
         Expression<Func<T, bool>> filter = null,
         Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
         string includeProperties = "")
@@ -97,11 +99,11 @@ namespace Infrastructure.Base
 
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return orderBy(query);
             }
             else
             {
-                return query.ToList();
+                return query;
             }
         }
 
